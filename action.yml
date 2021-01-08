@@ -1,14 +1,14 @@
 name: 'OmegaT'
 description: 'Run OmegaT task for team project'
 inputs:
-  command:
-    description: 'OmegaT task'
-    required: true
-    default: 'omegatTranslate'
-  args:
-    description: 'task arguments'
+  token:
+    description: "GitHub Secret Token; if not given the check result is not attached to the commit."
     required: false
-    default: []
+    default: ""
+  min-coverage:
+    description: "Minimum percentage (between 0.0 and 100.0) required to mark the check successful."
+    required: false
+    default: "0.0"
 runs:
   using: "composite"
   steps:
@@ -16,10 +16,15 @@ runs:
       id: setup-java
       with:
         java-version: 8
-    - run: |
-        echo "plugins { id 'org.omegat.gradle' version '1.2.5' }" > build.gradle
+    - run: ${{ github.action_path }}/prepare.sh
+      shell: bash
     - uses: burrunan/gradle-cache-action@v1
       id: run-gradle
       with:
         arguments: ${{ inputs.command }}
         gradle-version: 6.7.1
+    - uses: miurahr/omegat-stat-action@v1
+      id: omegat-check-stat
+      with:
+        token: ${{ inputs.token }}
+        min-coverage: ${{ inputs.min-coverage }}
