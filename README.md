@@ -7,9 +7,7 @@ Run OmegaT task on github actions
 ```yaml
 uses: miurahr/omegat-action@v1
 with:
-  omegat-version: 5.4.1
-  command: translate
+  command: omegatTranslate
   args:
     user.language: en
 ```
-
