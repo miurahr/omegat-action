@@ -18,6 +18,8 @@ runs:
         java-version: 8
     - run: ${{ github.action_path }}/prepare.sh
       shell: bash
+    - name: make source and target directory
+      run: mkdir -p source target
     - uses: burrunan/gradle-cache-action@v1
       id: run-gradle
       with:
