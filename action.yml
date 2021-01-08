@@ -1,4 +1,4 @@
-name: 'OmegaT'
+name: 'omegat-check'
 description: 'Run OmegaT task for team project'
 inputs:
   token:
@@ -9,6 +9,9 @@ inputs:
     description: "Minimum percentage (between 0.0 and 100.0) required to mark the check successful."
     required: false
     default: "0.0"
+branding:
+  icon: 'book-open'
+  color: 'green'
 runs:
   using: "composite"
   steps:
