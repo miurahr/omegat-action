@@ -4,7 +4,7 @@ inputs:
   command:
     description: 'OmegaT task'
     required: true
-    default: 'translate'
+    default: 'omegatTranslate'
   args:
     description: 'task arguments'
     required: false
@@ -12,10 +12,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: echo Hello ${{ inputs.who-to-greet }}.
-      shell: bash
-    - id: random-number-generator
-      run: echo "::set-output name=random-id::$(echo $RANDOM)"
-      shell: bash
-    - run: ${{ github.action_path }}/goodbye.sh
-      shell: bash
+    - uses: actions/setup-java@v1
+      id: setup-java
+      with:
+        java-version: 8
+    - run: |
+        echo "plugins { id 'org.omegat.gradle' version '1.2.5' }" > build.gradle
+    - uses: burrunan/gradle-cache-action@v1
+      id: run-gradle
+      with:
+        arguments: ${{ inputs.command }}
+        gradle-version: 6.7.1
